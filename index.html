@@ -6,29 +6,55 @@
 	<script src="PINE_Core_4.8.js"></script>
 
 	<script type="text/javascript">
+		function sendArg(argname, value) {
+			U.Ajax.get("local/python/test.py?"+argname+"="+value);
+		}
+
 		U.docReady(function(argument) {
 
 			var brightness = 1;
+			var output = El.byID("output");
 
 			document.body.addEventListener("keydown", function(event) {
 				var key = event.key;
 
 				if(key == "ArrowUp") 
-					brightness += 0.01;
+					brightness += 0.05;
 				else if(key == "ArrowDown") 
-					brightness -= 0.01;
+					brightness -= 0.05;
 
 				brightness = Math.max(brightness, 0);
 				brightness = Math.min(brightness, 1);
 
-				U.Ajax.get("local/python/test.py?bright="+brightness);
+				sendArg("bright", brightness);
+
+				output.textContent = brightness;
 			});
 		});
+
+		
 	</script>
 </head>
 <body>
 
+<span id="output">1.0</span>
 
 
+	<button onclick="sendArg('mode','off')">Off</button>
+	<button onclick="sendArg('mode','on')">On</button>
+
+	<button onclick="sendArg('mode','wave')">Wave</button>
+	<button onclick="sendArg('mode','sawUp')">Saw Up</button>
+	<button onclick="sendArg('mode','sawDown')">Saw Down</button>
 </body>
+
+
+<style>
+	button {
+		cursor: pointer;
+		/*padding: 20px;*/
+		font-size: 15px;
+		/*background-color: #F0F;*/
+	}
+</style>
 </html>
